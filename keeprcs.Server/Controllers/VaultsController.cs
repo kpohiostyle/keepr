@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using CodeWorks.Auth0Provider;
 using keeprcs.Server.Models;
@@ -11,41 +10,27 @@ namespace keeprcs.Server.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class KeepsController : ControllerBase
+    public class VaultsController : ControllerBase
     {
+        private readonly VaultsService _vs;
 
-        private readonly KeepsService _ks;
-
-        public KeepsController(KeepsService ks)
+        public VaultsController(VaultsService vs)
         {
-            _ks = ks;
+            _vs = vs;
         }
 
-        [HttpGet]
-        public ActionResult<List<Keep>> Get()
-        {
-            try
-            {
-                List<Keep> keeps = _ks.GetKeeps();
-                return Ok(keeps);
-            }
-            catch (System.Exception e)
-            {
-                return BadRequest(e.Message);
-
-            }
-        }
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Keep>> Create([FromBody] Keep k)
+
+        public async Task<ActionResult<Vault>> Create([FromBody] Vault v)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                k.CreatorId = userInfo.Id;
-                Keep newKeep = _ks.Create(k);
-                newKeep.Creator = userInfo;
-                return Ok(newKeep);
+                v.CreatorId = userInfo.Id;
+                Vault newVault = _vs.Create(v);
+                newVault.Creator = userInfo;
+                return Ok(newVault);
             }
             catch (System.Exception e)
             {
@@ -53,7 +38,7 @@ namespace keeprcs.Server.Controllers
                 return BadRequest(e.Message);
             }
         }
-        // [HttpPut]
+
         [Authorize]
         [HttpDelete("{id}")]
 
@@ -62,11 +47,12 @@ namespace keeprcs.Server.Controllers
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _ks.Delete(id, userInfo.Id);
+                _vs.Delete(id, userInfo.Id);
                 return Ok("Successfully Deleted");
             }
             catch (System.Exception e)
             {
+
                 return BadRequest(e.Message);
             }
         }

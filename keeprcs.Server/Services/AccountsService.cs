@@ -1,3 +1,4 @@
+using System;
 using keeprcs.Server.Models;
 using keeprcs.Server.Repositories;
 
@@ -27,6 +28,11 @@ namespace keeprcs.Server.Services
                 return _repo.Create(userInfo);
             }
             return profile;
+        }
+
+        internal Profile GetProfileById(string id)
+        {
+            return _repo.GetById(id);
         }
 
         internal Account Edit(Account editData, string userEmail)
