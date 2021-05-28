@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using keeprcs.Server.Models;
 using keeprcs.Server.Repositories;
 
@@ -37,6 +38,11 @@ namespace keeprcs.Server.Services
                 throw new Exception("You mustn't be allowed to delete if you have not created it yourself");
             }
             _vaultsRepo.Delete(id);
+        }
+
+        internal List<Vault> GetVaults(int profileId)
+        {
+            return _vaultsRepo.GetVaults(profileId);
         }
     }
 }

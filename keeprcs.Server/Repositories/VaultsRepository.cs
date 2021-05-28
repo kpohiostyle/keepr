@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
@@ -47,6 +49,14 @@ namespace keeprcs.Server.Repositories
         internal void Delete(int id)
         {
             throw new NotImplementedException();
+        }
+
+        internal List<Vault> GetVaults(int id)
+        {
+            string sql = @"
+            SELECT * FROM vaults WHERE v.creatorId = @id";
+            return _db.Query<Vault>(sql).ToList();
+
         }
     }
 }

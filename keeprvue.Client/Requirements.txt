@@ -15,16 +15,16 @@ All deletes require confirmation
 
 *************Server Requirements******************
 
-Visitors can see all keeps (login not required)
-All users have a public profile page
-Each vault has its own route where users can view all of the keeps in the vault
+Visitors can see all keeps (login not required)        {{getAll}}
+All users have a public profile page {{getProfile}}
+Each vault has its own route where users can view all of the keeps in the vault {{getVaultById}}
 On the vault page, if the vault is private and not the active users the request fails
 Users can Register, login and automatically authenticated on refresh
-Create and Delete Keeps
-Create and Delete Vaults
+Create and Delete Keeps {{Create / Delete}}
+Create and Delete Vaults {{Create / Delete}}
 Users can only Delete things they created
-Add keeps to vaults
-Remove keeps from vaults
+Add keeps to vaults {{??????}}
+Remove keeps from vaults{{DeleteByVault}}
 All Valid Auth API Tests pass
 All No Auth API Tests pass
 All Invalid Auth API Tests pass

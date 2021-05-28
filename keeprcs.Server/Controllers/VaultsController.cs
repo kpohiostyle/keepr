@@ -21,7 +21,6 @@ namespace keeprcs.Server.Controllers
 
         [Authorize]
         [HttpPost]
-
         public async Task<ActionResult<Vault>> Create([FromBody] Vault v)
         {
             try

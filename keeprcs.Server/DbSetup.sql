@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS keeps(
   description VARCHAR(255) NOT NULL COMMENT 'keep description' imgUrl VARCHAR(255) NOT NULL COMMENT 'keep image',
   views INT COMMENT 'how many times a keep is viewed',
   shares INT COMMENT 'how many times a keep is shared',
-  keeps INT COMMENT 'review what this field is in charge of'
+  keeps INT COMMENT 'review what this field is in charge of',
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS vaults (
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY COMMENT 'PK: keeps',
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS vaults (
   creatorId VARCHAR(255) NOT NULL COMMENT 'FK: from profile',
   name VARCHAR(255) NOT NULL COMMENT 'keep name',
   description VARCHAR(255) NOT NULL COMMENT 'keep description' imgUrl VARCHAR(255) NOT NULL COMMENT 'keep image',
-  isPrivate BOOLEAN COMMENT 'will come back to add comment'
+  isPrivate BOOLEAN COMMENT 'will come back to add comment',
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT Exists vault_keep(
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY COMMENT 'PK: keeps',
