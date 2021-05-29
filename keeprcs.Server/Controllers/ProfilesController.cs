@@ -13,11 +13,13 @@ namespace keeprcs.Server.Controllers
         private readonly AccountsService _accountService;
 
         private readonly VaultsService _vs;
+        private readonly KeepsService _ks;
 
-        public ProfilesController(AccountsService accountService, VaultsService vs)
+        public ProfilesController(AccountsService accountService, VaultsService vs, KeepsService ks)
         {
             _accountService = accountService;
             _vs = vs;
+            _ks = ks;
         }
 
         [HttpGet("{id}")]
@@ -50,5 +52,21 @@ namespace keeprcs.Server.Controllers
                 throw;
             }
         }
+
+        [HttpGet("{id}/keeps")]
+        public ActionResult<List<Keep>> GetKeeps(int id)
+        {
+            try
+            {
+                List<Keep> keeps = _ks.GetKeeps(id);
+                return Ok(keeps);
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
+        }
+
     }
 }

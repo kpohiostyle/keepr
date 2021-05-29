@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS keeps(
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   creatorId VARCHAR(255) NOT NULL COMMENT 'FK: from profile',
   name VARCHAR(255) NOT NULL COMMENT 'keep name',
-  description VARCHAR(255) NOT NULL COMMENT 'keep description' imgUrl VARCHAR(255) NOT NULL COMMENT 'keep image',
+  description VARCHAR(255) NOT NULL COMMENT 'keep description' img VARCHAR(255) NOT NULL COMMENT 'keep image',
   views INT COMMENT 'how many times a keep is viewed',
   shares INT COMMENT 'how many times a keep is shared',
   keeps INT COMMENT 'review what this field is in charge of',

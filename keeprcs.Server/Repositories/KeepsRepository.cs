@@ -16,12 +16,19 @@ namespace keeprcs.Server.Repositories
             _db = db;
         }
 
-        internal List<Keep> GetKeeps()
+        internal List<Keep> GetAllKeeps()
         {
             string sql = @"
-            Select * FROM keeps";
+            Select k.*,
+            a.*
+            FROM keeps k
+            JOIN accounts a ON k.CreatorId = a.id;";
 
-            return _db.Query<Keep>(sql).ToList();
+            return _db.Query<Keep, Account, Keep>(sql, (k, a) =>
+            {
+                k.Creator = a;
+                return k;
+            }).ToList();
         }
 
         internal Keep Create(Keep newKeep)
@@ -55,7 +62,30 @@ namespace keeprcs.Server.Repositories
 
         internal void Delete(int id)
         {
-            throw new NotImplementedException();
+            string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";
+            _db.Execute(sql, new { id });
+        }
+
+        internal List<Keep> GetKeeps(int profileId)
+        {
+            string sql = @"
+            SELECT * FROM vaults WHERE k.creatorId = @id";
+            return _db.Query<Keep>(sql).ToList();
+        }
+
+        internal Keep Update(Keep k)
+        {
+            string sql = @"
+           UPDATE keeps
+           SET
+            name = @Name,
+            description = @Description,
+            img = @Img,
+            views = @Views,
+            shares = @Shares,
+            keeps = @Keeps";
+            _db.Execute(sql, k);
+            return k;
         }
     }
 }

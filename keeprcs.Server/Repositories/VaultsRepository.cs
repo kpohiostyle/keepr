@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
@@ -48,7 +47,21 @@ namespace keeprcs.Server.Repositories
 
         internal void Delete(int id)
         {
-            throw new NotImplementedException();
+            string sql = "DELETE FROM vaults WHERE id = @id LIMIT 1;";
+            _db.Execute(sql, new { id });
+        }
+        internal Vault Update(Vault v)
+        {
+            {
+                string sql = @"
+           UPDATE vaults
+           SET
+            name = @Name,
+            description = @Description,
+            isPrivate = @IsPrivate";
+                _db.Execute(sql, v);
+                return v;
+            }
         }
 
         internal List<Vault> GetVaults(int id)
@@ -58,5 +71,6 @@ namespace keeprcs.Server.Repositories
             return _db.Query<Vault>(sql).ToList();
 
         }
+
     }
 }

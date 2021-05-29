@@ -22,17 +22,31 @@ namespace keeprcs.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Keep>> Get()
+        public ActionResult<List<Keep>> GetAll()
         {
             try
             {
-                List<Keep> keeps = _ks.GetKeeps();
+                List<Keep> keeps = _ks.GetAllKeeps();
                 return Ok(keeps);
             }
             catch (System.Exception e)
             {
                 return BadRequest(e.Message);
 
+            }
+        }
+        [HttpGet("{id}")]
+        public ActionResult<Keep> GetById(int id)
+        {
+            try
+            {
+                Keep keep = _ks.GetById(id);
+                return Ok(keep);
+            }
+            catch (System.Exception e)
+            {
+
+                return BadRequest(e.Message);
             }
         }
         [Authorize]
@@ -53,7 +67,7 @@ namespace keeprcs.Server.Controllers
                 return BadRequest(e.Message);
             }
         }
-        // [HttpPut]
+
         [Authorize]
         [HttpDelete("{id}")]
 
@@ -64,6 +78,24 @@ namespace keeprcs.Server.Controllers
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 _ks.Delete(id, userInfo.Id);
                 return Ok("Successfully Deleted");
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Keep>> Update(int id, [FromBody] Keep k)
+        {
+            try
+            {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                k.Id = id;
+                Keep newKeep = _ks.Update(k, userInfo.Id);
+                newKeep.Creator = userInfo;
+                return Ok(newKeep);
             }
             catch (System.Exception e)
             {

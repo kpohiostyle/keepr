@@ -19,6 +19,21 @@ namespace keeprcs.Server.Controllers
             _vs = vs;
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<Keep> GetById(int id)
+        {
+            try
+            {
+                Vault vault = _vs.GetById(id);
+                return Ok(vault);
+            }
+            catch (System.Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<Vault>> Create([FromBody] Vault v)
@@ -37,6 +52,24 @@ namespace keeprcs.Server.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Vault>> Update(int id, [FromBody] Vault vault)
+        {
+            try
+            {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                vault.Id = id;
+                Vault newVault = _vs.Update(vault, userInfo.Id);
+                newVault.Creator = userInfo;
+                return Ok(newVault);
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
 
         [Authorize]
         [HttpDelete("{id}")]

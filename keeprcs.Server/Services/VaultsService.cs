@@ -14,7 +14,7 @@ namespace keeprcs.Server.Services
             _vaultsRepo = vaultsRepo;
         }
 
-        internal Vault Get(int id)
+        internal Vault GetById(int id)
         {
             var v = _vaultsRepo.GetById(id);
             if (v == null)
@@ -29,9 +29,10 @@ namespace keeprcs.Server.Services
             return _vaultsRepo.Create(v);
         }
 
+
         internal void Delete(int id, string userId)
         {
-            Vault vault = Get(id);
+            Vault vault = GetById(id);
 
             if (vault.CreatorId != userId)
             {
@@ -39,10 +40,25 @@ namespace keeprcs.Server.Services
             }
             _vaultsRepo.Delete(id);
         }
-
+        // From ProfilesController
         internal List<Vault> GetVaults(int profileId)
         {
             return _vaultsRepo.GetVaults(profileId);
+        }
+
+        internal Vault Update(Vault vault, string id)
+        {
+            Vault v = _vaultsRepo.GetById(vault.Id);
+
+            if (v == null)
+            {
+                throw new Exception("Invalid Id");
+            }
+            if (v.CreatorId != id)
+            {
+                throw new Exception("You cannot edit something you didn't create");
+            }
+            return _vaultsRepo.Update(v);
         }
     }
 }
