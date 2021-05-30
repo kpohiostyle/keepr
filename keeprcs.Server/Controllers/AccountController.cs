@@ -12,11 +12,11 @@ namespace keeprcs.Server.Controllers
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly AccountsService _accountService;
+        private readonly AccountsService _accountsService;
 
-        public AccountController(AccountsService accountService)
+        public AccountController(AccountsService accountsService)
         {
-            _accountService = accountService;
+            _accountsService = accountsService;
         }
 
         [HttpGet]
@@ -26,8 +26,8 @@ namespace keeprcs.Server.Controllers
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                //TODO Make Ok Return Correctly
-                return Ok();
+                return Ok(_accountsService.GetOrCreateProfile(userInfo));
+
             }
             catch (Exception e)
             {

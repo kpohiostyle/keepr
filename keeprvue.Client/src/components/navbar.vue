@@ -1,12 +1,15 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
+      <div class="d-flex  align-items-center inline">
         <img
           alt="logo"
-          src="../assets/img/cw-logo.png"
+          src="../assets/img/k-logo.png"
           height="45"
         />
+        <h5 class="nav-header">
+          eepr
+        </h5>
       </div>
     </router-link>
     <button
@@ -121,7 +124,16 @@ a:hover {
 .nav-link{
   text-transform: uppercase;
 }
-.nav-item .nav-link.router-link-exact-active{
+.nav-item .nav-link.router-link-exact-active, .nav-header{
   color: var(--primary);
+}
+.navbar{
+  background: var(--secondary);
+}
+.navbar-toggler, .navbar-text{
+  background-color: var(--primary);
+}
+.navbar-text{
+  border-radius: 5px;
 }
 </style>

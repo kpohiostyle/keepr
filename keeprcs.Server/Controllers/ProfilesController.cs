@@ -7,7 +7,7 @@ namespace keeprcs.Server.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     public class ProfilesController : ControllerBase
     {
         private readonly AccountsService _accountService;

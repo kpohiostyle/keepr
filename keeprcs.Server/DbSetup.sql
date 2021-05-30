@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS keeps(
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   creatorId VARCHAR(255) NOT NULL COMMENT 'FK: from profile',
   name VARCHAR(255) NOT NULL COMMENT 'keep name',
-  description VARCHAR(255) NOT NULL COMMENT 'keep description' img VARCHAR(255) NOT NULL COMMENT 'keep image',
+  description VARCHAR(255) NOT NULL COMMENT 'keep description',
+  img VARCHAR(255) NOT NULL COMMENT 'keep image',
   views INT COMMENT 'how many times a keep is viewed',
   shares INT COMMENT 'how many times a keep is shared',
   keeps INT COMMENT 'review what this field is in charge of',
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS vaults (
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   creatorId VARCHAR(255) NOT NULL COMMENT 'FK: from profile',
   name VARCHAR(255) NOT NULL COMMENT 'keep name',
-  description VARCHAR(255) NOT NULL COMMENT 'keep description' imgUrl VARCHAR(255) NOT NULL COMMENT 'keep image',
+  description VARCHAR(255) NOT NULL COMMENT 'keep description',
+  imgUrl VARCHAR(255) NOT NULL COMMENT 'keep image',
   isPrivate BOOLEAN COMMENT 'will come back to add comment',
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 );
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT Exists vault_keep(
   creatorId VARCHAR(255) NOT NULL COMMENT 'FK: from profile',
   vaultId INT NOT NULL COMMENT 'FK: from vault table',
   keepId INT NOT NULL COMMENT 'FK: from keep table',
-  FOREIGN KEY (vaultId) REFERENCES vaults(id) ON CASCADE DELETE,
-  FOREIGN KEY (keepId) REFERENCES keeps(id) ON CASCADE DELETE
+  FOREIGN KEY (vaultId) REFERENCES vaults(id) ON DELETE CASCADE,
+  FOREIGN KEY (keepId) REFERENCES keeps(id) ON DELETE CASCADE
 );
+-- SELECT * FROM accounts

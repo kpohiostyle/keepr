@@ -10,15 +10,17 @@ namespace keeprcs.Server.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller")]
     public class KeepsController : ControllerBase
     {
 
         private readonly KeepsService _ks;
+        private readonly AccountsService _accountsService;
 
-        public KeepsController(KeepsService ks)
+        public KeepsController(KeepsService ks, AccountsService accountsService)
         {
             _ks = ks;
+            _accountsService = accountsService;
         }
 
         [HttpGet]
@@ -56,6 +58,7 @@ namespace keeprcs.Server.Controllers
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                Account fullAccount = _accountsService.GetOrCreateProfile(userInfo);
                 k.CreatorId = userInfo.Id;
                 Keep newKeep = _ks.Create(k);
                 newKeep.Creator = userInfo;

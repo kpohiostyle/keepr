@@ -19,7 +19,8 @@ namespace keeprcs.Server.Repositories
         internal List<Keep> GetAllKeeps()
         {
             string sql = @"
-            Select k.*,
+            Select 
+            k.*,
             a.*
             FROM keeps k
             JOIN accounts a ON k.CreatorId = a.id;";
@@ -35,9 +36,9 @@ namespace keeprcs.Server.Repositories
         {
             string sql = @"
             INSERT INTO keeps
-            (name, description, img, views, shares, keeps)
+            (name, description, img, creatorId)
             VALUES
-            (@Name, @Description, @Img, @Views, @Shares, @Keeps)
+            (@Name, @Description, @Img, @CreatorId)
             SELECT LAST_INSERT_ID()";
 
             newKeep.Id = _db.ExecuteScalar<int>(sql, newKeep);

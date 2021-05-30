@@ -15,11 +15,11 @@ namespace keeprcs.Server.Models
         [Required]
         public string Img { get; set; }
         [Required]
-        public int Views { get; set; }
+        public int Views { get; set; } = 0;
         [Required]
-        public int Shares { get; set; }
+        public int Shares { get; set; } = 0;
         [Required]
-        public int Keeps { get; set; }
+        public int Keeps { get; set; } = 0;
         [Required]
         public Profile Creator { get; set; }
     }

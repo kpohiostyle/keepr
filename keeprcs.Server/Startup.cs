@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using keeprcs.Server.Repositories;
+using keeprcs.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +34,20 @@ namespace keeprcs.Server
             ConfigureCors(services);
             ConfigureAuth(services);
             services.AddControllers();
+
+            services.AddScoped<IDbConnection>(x => CreateDbConnection());
+
+            services.AddScoped<AccountsService>();
+            services.AddTransient<KeepsService>();
+            services.AddTransient<VaultKeepsService>();
+            services.AddTransient<VaultsService>();
+
+
+            services.AddScoped<AccountsRepository>();
+            services.AddTransient<KeepsRepository>();
+            services.AddTransient<VaultsRepository>();
+            services.AddTransient<VaultKeepsRepository>();
+
 
 
             services.AddSwaggerGen(c =>
@@ -85,6 +101,7 @@ namespace keeprcs.Server
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "keeprcs.Server v1"));
+                app.UseCors("CorsDevPolicy");
             }
 
             app.UseHttpsRedirection();
