@@ -71,7 +71,7 @@ export default {
   setup() {
     const route = useRoute()
     const state = reactive({
-      newNote: {},
+      newKeep: {},
       account: computed(() => AppState.account),
       user: computed(() => AppState.user)
     })
@@ -79,7 +79,7 @@ export default {
       state,
       async createKeep() {
         try {
-          state.newKeep = route.params.id
+        //   state.newKeep = route.params.id
           await keepsService.createKeep(state.newKeep, route.params.id)
         } catch (error) {
           Notification.toast('Successfully Created', 'success')

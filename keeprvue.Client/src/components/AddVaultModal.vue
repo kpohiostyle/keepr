@@ -61,8 +61,32 @@
   </div>
 </template>
 <script>
+import { computed, reactive } from 'vue'
+import { AppState } from '../AppState'
+import { vaultsService } from '../service/KeepsService'
+import { useRoute } from 'vue-router'
+import Notification from '../utils/Notification'
 export default {
-
+  name: 'AddVaultModal',
+  setup() {
+    const route = useRoute()
+    const state = reactive({
+      newVault: {},
+      account: computed(() => AppState.account),
+      user: computed(() => AppState.user)
+    })
+    return {
+      state,
+      async createVault() {
+        try {
+        //   state.newVault = route.params.id
+          await vaultsService.createVault(state.newVault, route.params.id)
+        } catch (error) {
+          Notification.toast('Successfully Created', 'success')
+        }
+      }
+    }
+  }
 }
 </script>
 <style>
