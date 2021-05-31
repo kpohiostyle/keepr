@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-3 my-2 col-6">
     <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img" @click="openModal(keepDetailsModal)">
+      <img src="//placehold.it/200x200" class="card-img">
       <div class="card-img-overlay d-flex align-items-end inline">
         <h5 class="card-title">
           Title
@@ -106,15 +106,12 @@ export default {
     })
 
     return {
-      state,
-      openModal: false
+      state
 
     }
   },
   components: {
-    KeepModal() {
-      this.openModal = true
-    }
+
   }
 
 }
