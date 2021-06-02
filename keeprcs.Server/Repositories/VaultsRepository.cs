@@ -64,10 +64,13 @@ namespace keeprcs.Server.Repositories
             }
         }
 
-        internal List<Vault> GetVaults(int id)
+        internal List<Vault> GetVaults(string id)
         {
             string sql = @"
-            SELECT * FROM vaults WHERE v.creatorId = @id";
+            SELECT v.*,
+            a.*
+            FROM vaults v 
+            JOIN accounts a ON v.creatorId = a.id";
             return _db.Query<Vault>(sql).ToList();
 
         }

@@ -10,7 +10,7 @@ namespace keeprcs.Server.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     public class KeepsController : ControllerBase
     {
 

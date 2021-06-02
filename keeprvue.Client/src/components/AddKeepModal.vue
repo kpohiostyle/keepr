@@ -11,7 +11,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="createKeep">
+          <form @submit.prevent="createKeep" v-if="state.activeProfile.id === state.account.id">
             <div class="form-group">
               <label for="title">Title</label>
               <input type="text"
@@ -19,7 +19,7 @@
                      id="title"
                      aria-describedby="title"
                      placeholder="Keep Title"
-                     v-model="state.newKeep.title"
+                     v-model="state.newKeep.name"
                      required
               >
             </div>
@@ -27,21 +27,21 @@
               <label for="comment">Img Url:</label>
               <input type="text"
                      class="form-control"
-                     id="comment"
+                     id="imgUrl"
                      aria-describedby="comment"
                      placeholder="Img Url:"
-                     v-model="state.newkeep.img"
+                     v-model="state.newKeep.img"
                      required
               >
             </div>
             <div class="form-group">
-              <label for="comment">Comment</label>
+              <label for="comment">Description</label>
               <input type="text"
                      class="form-control"
-                     id="comment"
+                     id="keepDescription"
                      aria-describedby="comment"
-                     placeholder="Bug Comment"
-                     v-model="state.newkeep.description"
+                     placeholder="Keep description"
+                     v-model="state.newKeep.description"
                      required
               >
             </div>
@@ -63,16 +63,18 @@
 <script>
 import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { keepsService } from '../service/KeepsService'
-import { useRoute } from 'vue-router'
+import { keepsService } from '../services/KeepsService'
+// import { useRoute } from 'vue-router'
 import Notification from '../utils/Notification'
+import $ from 'jquery'
 export default {
   name: 'AddKeepModal',
   setup() {
-    const route = useRoute()
+    // const route = useRoute()
     const state = reactive({
       newKeep: {},
       account: computed(() => AppState.account),
+      activeProfile: computed(() => AppState.activeProfile),
       user: computed(() => AppState.user)
     })
     return {
@@ -80,9 +82,12 @@ export default {
       async createKeep() {
         try {
         //   state.newKeep = route.params.id
-          await keepsService.createKeep(state.newKeep, route.params.id)
-        } catch (error) {
+          await keepsService.createKeep(state.newKeep)
+          state.newKeep = {}
+          $('#addKeepModal').modal('hide')
           Notification.toast('Successfully Created', 'success')
+        } catch (error) {
+          Notification.toast('Error: ' + error, 'error')
         }
       }
     }

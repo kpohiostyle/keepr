@@ -11,7 +11,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="createVault">
+          <form @submit.prevent="createVault" v-if="state.account.id === state.activeProfile.id">
             <div class="form-group">
               <label for="title">Vault Name</label>
               <input type="text"
@@ -27,7 +27,7 @@
               <label for="comment">Description</label>
               <input type="text"
                      class="form-control"
-                     id="comment"
+                     id="vaultDescription"
                      aria-describedby="comment"
                      placeholder="Vault Description"
                      v-model="state.newVault.description"
@@ -35,14 +35,13 @@
               >
             </div>
             <div class="form-group">
-              <label for="comment">Description</label>
+              <label for="comment">Private</label>
               <input type="checkbox"
                      class="form-control"
-                     id="comment"
+                     id="isPrivate"
                      aria-describedby="comment"
-                     placeholder="Vault Description"
-                     v-model="state.newVault.description"
-                     required
+                     placeholder=""
+                     v-model="state.newVault.isPrivate"
               >
             </div>
             <div class="modal-footer">
@@ -63,16 +62,17 @@
 <script>
 import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { vaultsService } from '../service/KeepsService'
-import { useRoute } from 'vue-router'
+import { vaultsService } from '../services/VaultsService'
+// import { useRoute } from 'vue-router'
 import Notification from '../utils/Notification'
 export default {
   name: 'AddVaultModal',
   setup() {
-    const route = useRoute()
+    // const route = useRoute()
     const state = reactive({
       newVault: {},
       account: computed(() => AppState.account),
+      activeProfile: computed(() => AppState.activeProfile),
       user: computed(() => AppState.user)
     })
     return {
@@ -80,9 +80,10 @@ export default {
       async createVault() {
         try {
         //   state.newVault = route.params.id
-          await vaultsService.createVault(state.newVault, route.params.id)
-        } catch (error) {
+          await vaultsService.createVault(state.newVault)
           Notification.toast('Successfully Created', 'success')
+        } catch (error) {
+          Notification.toast('Error: ' + error, 'error')
         }
       }
     }

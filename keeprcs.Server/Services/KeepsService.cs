@@ -59,7 +59,7 @@ namespace keeprcs.Server.Services
             return _keepsRepo.Update(k);
         }
 
-        internal List<Keep> GetKeeps(int profileId)
+        internal List<Keep> GetKeeps(string profileId)
         {
             return _keepsRepo.GetKeeps(profileId);
         }

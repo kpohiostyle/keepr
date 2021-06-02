@@ -2,8 +2,8 @@ import { AppState } from '../AppState.js'
 import { api } from './AxiosService.js'
 
 class VaultsService {
-  async getVaults() {
-    const res = await api.get('api/vaults')
+  async getVaults(id) {
+    const res = await api.get(`api/profiles/${id}/vaults`)
     AppState.vaults = res.data
   }
 
@@ -13,7 +13,7 @@ class VaultsService {
   }
 
   async createVault(newVault) {
-    const res = await api.post('api/vualts', newVault)
+    const res = await api.post('api/vaults', newVault)
     this.getVaults(res.data)
   }
 }

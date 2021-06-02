@@ -10,14 +10,14 @@ namespace keeprcs.Server.Controllers
     [Route("api/[controller]")]
     public class ProfilesController : ControllerBase
     {
-        private readonly AccountsService _accountService;
+        private readonly AccountsService _accountsService;
 
         private readonly VaultsService _vs;
         private readonly KeepsService _ks;
 
-        public ProfilesController(AccountsService accountService, VaultsService vs, KeepsService ks)
+        public ProfilesController(AccountsService accountsService, VaultsService vs, KeepsService ks)
         {
-            _accountService = accountService;
+            _accountsService = accountsService;
             _vs = vs;
             _ks = ks;
         }
@@ -28,7 +28,7 @@ namespace keeprcs.Server.Controllers
 
             try
             {
-                Profile profile = _accountService.GetProfileById(id);
+                Profile profile = _accountsService.GetProfileById(id);
                 return Ok(profile);
             }
             catch (System.Exception e)
@@ -39,7 +39,7 @@ namespace keeprcs.Server.Controllers
         }
 
         [HttpGet("{id}/vaults")]
-        public ActionResult<List<Vault>> GetVaults(int id)
+        public ActionResult<List<Vault>> GetVaults(string id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace keeprcs.Server.Controllers
         }
 
         [HttpGet("{id}/keeps")]
-        public ActionResult<List<Keep>> GetKeeps(int id)
+        public ActionResult<List<Keep>> GetKeeps(string id)
         {
             try
             {

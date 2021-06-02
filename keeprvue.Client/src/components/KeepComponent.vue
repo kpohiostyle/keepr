@@ -1,90 +1,23 @@
 <template>
   <div class="col-md-3 my-2 col-6">
     <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3 my-2 col-6">
-    <div class="card shadow ">
-      <img src="//placehold.it/200x200" class="card-img">
-      <div class="card-img-overlay d-flex align-items-end inline">
-        <h5 class="card-title">
-          Title
-        </h5>
-        <img src="//placehold.it/30x30" class="rounded-circle small-image profile" alt="">
-      </div>
+      <button title="Open Keep Details"
+              type="button"
+              class=""
+              data-toggle="modal"
+              data-target="#keepDetailsModal"
+              @click="keepDetails()"
+      >
+        <img :src="keep.img" class="card-img">
+        <div class="card-img-overlay d-flex align-items-end inline">
+          <h5 class="card-title">
+            {{ keep.name }}
+          </h5>
+        </div>
+      </button>
+      <router-link :to="{name: 'ProfilePage', params: {id: keep.creatorId}}">
+        <img :src="keep.creator.picture" class="rounded-circle small-image profile" alt="">
+      </router-link>
     </div>
     <KeepModal />
   </div>
@@ -100,19 +33,18 @@ export default {
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const state = reactive({
-      keeps: computed(() => AppState.keeps)
+      activeKeep: computed(() => AppState.activeKeep)
     })
-
     return {
-      state
-
+      state,
+      keepDetails() {
+        AppState.activeKeep = props.keep
+      }
     }
   },
-  components: {
-
-  }
+  components: {}
 
 }
 </script>
@@ -121,7 +53,13 @@ export default {
     position: absolute;
     right: 0;
     bottom: 0;
-    border: 2px solid black;
-}
 
+}
+.small-image{
+  height: 30px;
+  width: 30px;
+}
+button{
+  border:none;
+}
 </style>

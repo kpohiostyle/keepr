@@ -41,7 +41,7 @@ namespace keeprcs.Server.Services
             _vaultsRepo.Delete(id);
         }
         // From ProfilesController
-        internal List<Vault> GetVaults(int profileId)
+        internal List<Vault> GetVaults(string profileId)
         {
             return _vaultsRepo.GetVaults(profileId);
         }

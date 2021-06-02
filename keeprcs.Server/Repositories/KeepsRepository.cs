@@ -38,8 +38,8 @@ namespace keeprcs.Server.Repositories
             INSERT INTO keeps
             (name, description, img, creatorId)
             VALUES
-            (@Name, @Description, @Img, @CreatorId)
-            SELECT LAST_INSERT_ID()";
+            (@Name, @Description, @Img, @CreatorId);
+            SELECT LAST_INSERT_ID();";
 
             newKeep.Id = _db.ExecuteScalar<int>(sql, newKeep);
             return newKeep;
@@ -53,7 +53,7 @@ namespace keeprcs.Server.Repositories
             a.*
             FROM keeps k
             JOIN accounts a ON a.id = k.creatorId
-            WHERE k.id = @id";
+            WHERE k.id = @id;";
             return _db.Query<Keep, Account, Keep>(sql, (k, a) =>
             {
                 k.Creator = a;
@@ -67,11 +67,20 @@ namespace keeprcs.Server.Repositories
             _db.Execute(sql, new { id });
         }
 
-        internal List<Keep> GetKeeps(int profileId)
+        internal List<Keep> GetKeeps(string id)
         {
             string sql = @"
-            SELECT * FROM vaults WHERE k.creatorId = @id";
-            return _db.Query<Keep>(sql).ToList();
+            Select 
+            k.*,
+            a.*
+            FROM keeps k
+            JOIN accounts a ON k.CreatorId = a.id;";
+
+            return _db.Query<Keep, Account, Keep>(sql, (k, a) =>
+            {
+                k.Creator = a;
+                return k;
+            }).ToList();
         }
 
         internal Keep Update(Keep k)
