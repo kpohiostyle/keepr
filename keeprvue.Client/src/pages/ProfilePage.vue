@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="state.activeProfile">
     <div class="row my-4 px-4">
       <div class="col-3 px-4">
         <img :src="state.activeProfile.picture" alt="Profile Image">
@@ -20,10 +20,10 @@
                 data-target="#addvaultmodal"
                 v-if="state.user.isAuthenticated"
         >
-          <span class="mdi-plus-outline"></span>
+          <i class="far fa-plus-square"></i>
         </button>
       </div>
-      <div class="row">
+      <div class="row mb-5 px-4">
         <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
       </div>
     </div>
@@ -37,7 +37,7 @@
                 data-target="#addkeepmodal"
                 v-if="state.user.isAuthenticated"
         >
-          <span class="mdi-plus-outline"></span>
+          <i class="far fa-plus-square"></i>
         </button>
       </div>
       <div class="row">
@@ -70,9 +70,9 @@ export default {
     })
     onMounted(async() => {
       try {
+        await accountService.getProfile(route.params.id)
         await keepsService.getKeepsByProfile(route.params.id)
         await vaultsService.getVaults(route.params.id)
-        await accountService.getProfile(route.params.id)
       } catch (error) {
         Notification.toast('Error: ' + error, 'error')
       }

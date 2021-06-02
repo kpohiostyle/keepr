@@ -41,9 +41,9 @@ namespace keeprcs.Server.Services
             _vaultsRepo.Delete(id);
         }
         // From ProfilesController
-        internal List<Vault> GetVaults(string profileId)
+        internal List<Vault> GetVaults(string id)
         {
-            return _vaultsRepo.GetVaults(profileId);
+            return _vaultsRepo.GetVaults(id);
         }
 
         internal Vault Update(Vault vault, string id)
@@ -58,6 +58,11 @@ namespace keeprcs.Server.Services
             {
                 throw new Exception("You cannot edit something you didn't create");
             }
+            v.Name = vault.Name != null ? vault.Name : v.Name;
+            v.Description = vault.Description != null ? vault.Description : v.Description;
+            // v.isPrivate = vault.isPrivate != null ? vault.isPrivate : v.isPrivate;
+            // TODO add the other changable properties
+
             return _vaultsRepo.Update(v);
         }
     }

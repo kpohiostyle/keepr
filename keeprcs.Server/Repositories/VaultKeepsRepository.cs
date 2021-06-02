@@ -16,6 +16,7 @@ namespace keeprcs.Server.Repositories
 
         internal VaultKeep Create(VaultKeep vk)
         {
+            // TODO update keep to increase its keep count by 1
             string sql = @"
             INSERT INTO vault_keep(vaultId, keepId)
             VALUES(@VaultId, @KeepId)

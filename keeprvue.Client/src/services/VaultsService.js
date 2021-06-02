@@ -16,6 +16,11 @@ class VaultsService {
     const res = await api.post('api/vaults', newVault)
     this.getVaults(res.data)
   }
+
+  async addKeep(vaultId, body) {
+    const res = await api.post(`api/vaultKeeps/${vaultId}`, body)
+    AppState.vaultKeeps = res.data
+  }
 }
 
 export const vaultsService = new VaultsService()

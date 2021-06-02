@@ -20,10 +20,10 @@ namespace keeprcs.Server.Repositories
         {
             string sql = @"
             INSERT INTO vaults
-            (name, description, isPrivate,)
+            (name, description, isPrivate, creatorId)
             VALUES
-            (@Name, @Description, @IsPrivate)
-            SELECT LAST_INSERT_ID()";
+            (@Name, @Description, @IsPrivate, @CreatorId);
+            SELECT LAST_INSERT_ID();";
 
             v.Id = _db.ExecuteScalar<int>(sql, v);
             return v;
@@ -52,26 +52,32 @@ namespace keeprcs.Server.Repositories
         }
         internal Vault Update(Vault v)
         {
-            {
-                string sql = @"
-           UPDATE vaults
-           SET
-            name = @Name,
-            description = @Description,
-            isPrivate = @IsPrivate";
-                _db.Execute(sql, v);
-                return v;
-            }
+
+            string sql = @"
+                UPDATE vaults
+                SET
+                    name = @Name,
+                    description = @Description
+                WHERE id = @Id";
+            _db.Execute(sql, v);
+            return v;
+
         }
 
         internal List<Vault> GetVaults(string id)
         {
             string sql = @"
-            SELECT v.*,
+            SELECT 
+            v.*,
             a.*
             FROM vaults v 
-            JOIN accounts a ON v.creatorId = a.id";
-            return _db.Query<Vault>(sql).ToList();
+            JOIN accounts a ON v.CreatorId = a.id
+            WHERE creatorId = @id";
+            return _db.Query<Vault, Account, Vault>(sql, (v, a) =>
+            {
+                v.Creator = a;
+                return v;
+            }, new { id }).ToList();
 
         }
 

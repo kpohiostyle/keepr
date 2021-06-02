@@ -63,9 +63,9 @@
             :class="{ show: state.dropOpen }"
             @click="state.dropOpen = false"
           >
-            <router-link :to="{ name: 'Account' }">
+            <router-link v-if="state.user" :to="{ name: 'ProfilePage', params:{id:state.user.id} }">
               <div class="list-group-item list-group-item-action hoverable">
-                Account
+                Profile
               </div>
             </router-link>
             <div

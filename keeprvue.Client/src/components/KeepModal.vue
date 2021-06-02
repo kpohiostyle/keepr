@@ -1,14 +1,21 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="state.activeProfile">
     <div class="modal" id="keepDetailsModal" tabindex="-1" aria-labelledby="#keepDetailsModal" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="row">
-            <div class="col -md-6">
+            <div class="col-lg-6">
               <img :src="state.activeKeep.img" alt="" class="w-100 h-100 p-2">
             </div>
-            <div class="col-md-6 p-3 d-flex flex-column align-items-center">
-              <small class="p-3 mb-2">views | keeps | shares</small>
+            <div class="col-lg-6 p-3 d-flex flex-column align-items-center">
+              <div class="d-flex flex-inline justify-content-around">
+                <span class="p-3 mb-2"><i class="far fa-eye">{{ state.activeKeep.views }}</i></span>
+                <span class="p-3 mb-2"><i class="fab fa-korvue">{{ state.activeKeep.keeps }}</i></span>
+                <span class="p-3 mb-2"><i class="fas fa-share-alt">{{ state.activeKeep.shares }}</i></span>
+                <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
               <h3 class="p-3 mb-2">
                 {{ state.activeKeep.name }}
               </h3>
@@ -16,19 +23,30 @@
                 {{ state.activeKeep.description }}
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, facere maiores, ad sint cum nam eos non repudiandae officiis laudantium aut, minima atque aspernatur facilis quod inventore est magni dolores.
               </p>
-              <div class="row d-flex justify-content-between">
-                <div class="col-3">
-                  <button>
-                    ADD TO VAULT
+              <div class="row d-flex flex-inline justify-content-between align-items-end">
+                <div class="dropdown">
+                  <button class="btn btn-add dropdown-toggle"
+                          type="button"
+                          id="dropdownMenuButton"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                  >
+                    Add To Vault
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <!-- <a class="dropdown-item" href="#">Action</a> -->
+                    <a @click="addKeep(vault.id)" class="dropdown-item text-dark" v-for="vault in state.vaults" :key="vault.id">
+                      {{ vault.name }}
+                    </a>
+                  </div>
+                </div>
+                <div class="col-3 ml-5">
+                  <button class="btn-del" @click="deleteKeep(state.activeKeep)" v-if="state.activeKeep.creatorId == state.account.id">
+                    <i class="far fa-trash-alt"></i>
                   </button>
                 </div>
                 <div class="col-3">
-                  <button>
-                    DELETE
-                  </button>
-                </div>
-                <div class="col-3">
-                  Picture | Name
                 </div>
               </div>
             </div>
@@ -41,8 +59,10 @@
 <script>
 import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
-// import Notification from '../utils/Notification'
-// import $ from 'jquery'
+import { keepsService } from '../services/KeepsService'
+import Notification from '../utils/Notification'
+import $ from 'jquery'
+import { vaultsService } from '../services/VaultsService'
 export default {
   name: 'KeepModal',
   props: {
@@ -51,14 +71,34 @@ export default {
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const state = reactive({
-      activeKeep: computed(() => AppState.activeKeep)
-      // user: computed(() => AppState.user),
-      // account: computed(() => AppState.account)
+      activeKeep: computed(() => AppState.activeKeep),
+      activeProfile: computed(() => AppState.activeProfile),
+      keeps: computed(() => AppState.keeps),
+      user: computed(() => AppState.user),
+      vaults: computed(() => AppState.vaults),
+      account: computed(() => AppState.account)
     })
     return {
-      state
+      state,
+      async deleteKeep(activeKeep) {
+        try {
+          if (await Notification.confirmAction()) {
+            await keepsService.deleteKeep(activeKeep.id)
+          }
+          $('#keepDetailsModal').modal('hide')
+        } catch (error) {
+          Notification.toast('Error: ' + error, 'error')
+        }
+      },
+      async addKeep(id) {
+        try {
+          await vaultsService.addKeep(id, props.keep)
+        } catch (error) {
+          Notification.toast('Error:' + error, 'error')
+        }
+      }
     }
   }
 
@@ -67,5 +107,29 @@ export default {
 <style scoped>
 .b-border{
   border-bottom: 1px solid var(--primary);
+}
+.btn-del{
+  color: var(--primary);
+}
+.btn-del:hover{
+  background-color: var(--dark);
+  color: white;
+}
+.btn-add{
+  color: var(--secondary);
+  background-color:white;
+  border-color: var(--secondary);
+  font-size: 12px;
+
+}
+.btn-add:hover{
+  background-color: #0C7C59;
+}
+.btn-close{
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  color: var(--primary);
+
 }
 </style>
