@@ -47,7 +47,12 @@ namespace keeprcs.Server.Repositories
 
         internal Keep GetById(int id)
         {
+            // todo increment view count
             string sql = @"
+            UPDATE keeps
+            SET
+            views = @Views
+            WHERE id = @id;
             SELECT
             k.*,
             a.*
@@ -63,7 +68,7 @@ namespace keeprcs.Server.Repositories
 
         internal void Delete(int id)
         {
-            string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1;";
+            string sql = "DELETE FROM keeps WHERE id = @id LIMIT 1; ";
             _db.Execute(sql, new { id });
         }
 
