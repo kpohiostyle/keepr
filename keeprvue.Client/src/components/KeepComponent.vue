@@ -25,6 +25,7 @@
 <script>
 import { reactive, computed } from 'vue'
 import { AppState } from '../AppState'
+import { keepsService } from '../services/KeepsService'
 export default {
   name: 'KeepComponent',
   props: {
@@ -41,6 +42,7 @@ export default {
       state,
       keepDetails() {
         AppState.activeKeep = props.keep
+        keepsService.getKeepById(AppState.activeKeep.id)
       }
     }
   },

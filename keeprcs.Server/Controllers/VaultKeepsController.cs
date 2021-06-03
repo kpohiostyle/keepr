@@ -18,6 +18,10 @@ namespace keeprcs.Server.Controllers
         {
             _vks = vks;
         }
+
+        // [HttpGet]
+        // public
+
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<VaultKeep>> CreateAsync([FromBody] VaultKeep vk)
@@ -32,6 +36,24 @@ namespace keeprcs.Server.Controllers
             }
             catch (System.Exception e)
             {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+
+        public async Task<ActionResult<string>> Delete(int id)
+        {
+            try
+            {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                _vks.DeleteVaultKeep(id, userInfo.Id);
+                return Ok("Deleted");
+            }
+            catch (System.Exception e)
+            {
+
                 return BadRequest(e.Message);
             }
         }

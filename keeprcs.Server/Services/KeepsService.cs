@@ -56,12 +56,19 @@ namespace keeprcs.Server.Services
             {
                 throw new Exception("You cannot edit something you didn't create");
             }
+            keep.Name = k.Name != null ? k.Name : keep.Name;
+            keep.Description = k.Description != null ? k.Description : keep.Description;
+            keep.Img = k.Img != null ? k.Img : keep.Img;
+            keep.Views = k.Views > 0 ? k.Views : keep.Views;
+            keep.Shares = k.Shares > 0 ? k.Shares : keep.Shares;
+            keep.Keeps = k.Keeps > 0 ? k.Keeps : keep.Keeps;
             return _keepsRepo.Update(k);
         }
 
-        internal List<Keep> GetKeeps(string profileId)
+        internal List<Keep> GetKeeps(string id)
         {
-            return _keepsRepo.GetKeeps(profileId);
+
+            return _keepsRepo.GetKeeps(id);
         }
     }
 }

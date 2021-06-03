@@ -36,9 +36,9 @@ namespace keeprcs.Server.Repositories
         {
             string sql = @"
             INSERT INTO keeps
-            (name, description, img, creatorId)
+            (name, description, img, creatorId, views)
             VALUES
-            (@Name, @Description, @Img, @CreatorId);
+            (@Name, @Description, @Img, @CreatorId, @Views);
             SELECT LAST_INSERT_ID();";
 
             newKeep.Id = _db.ExecuteScalar<int>(sql, newKeep);
@@ -51,7 +51,7 @@ namespace keeprcs.Server.Repositories
             string sql = @"
             UPDATE keeps
             SET
-            views = @Views
+            views = views + 1
             WHERE id = @id;
             SELECT
             k.*,
@@ -79,13 +79,14 @@ namespace keeprcs.Server.Repositories
             k.*,
             a.*
             FROM keeps k
-            JOIN accounts a ON k.CreatorId = a.id;";
+            JOIN accounts a ON k.CreatorId = a.id
+            WHERE k.CreatorId = @id;";
 
             return _db.Query<Keep, Account, Keep>(sql, (k, a) =>
             {
                 k.Creator = a;
                 return k;
-            }).ToList();
+            }, new { id }).ToList();
         }
 
         internal Keep Update(Keep k)

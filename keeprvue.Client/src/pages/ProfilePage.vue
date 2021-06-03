@@ -6,8 +6,8 @@
       </div>
       <div class="col-f6 px-4">
         <h2>{{ state.activeProfile.name }}</h2>
-        <h5>Vaults: Int</h5>
-        <h5>Keeps: Int</h5>
+        <h5>Vaults: {{ state.userVaults.length }}</h5>
+        <h5>Keeps: {{ state.userKeeps.length }}</h5>
       </div>
     </div>
     <div class="row mt-5 px-4">
@@ -23,7 +23,10 @@
           <i class="far fa-plus-square"></i>
         </button>
       </div>
-      <div class="row mb-5 px-4">
+      <div class="row mb-5 px-4" v-if="state.user.id === $route.params.id">
+        <VaultComponent v-for="vault in state.userVaults" :key="vault.id" :vault="vault" />
+      </div>
+      <div class="row mb-5 px-4" v-else>
         <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
       </div>
     </div>
@@ -40,7 +43,10 @@
           <i class="far fa-plus-square"></i>
         </button>
       </div>
-      <div class="row">
+      <div class="row" v-if="state.account.id == $route.params.id">
+        <KeepComponent v-for="keep in state.userKeeps" :key="keep.id" :keep="keep" />
+      </div>
+      <div class="row" v-else>
         <KeepComponent v-for="keep in state.profileKeeps" :key="keep.id" :keep="keep" />
       </div>
     </div>
@@ -65,7 +71,9 @@ export default {
       user: computed(() => AppState.user),
       activeProfile: computed(() => AppState.activeProfile),
       profileKeeps: computed(() => AppState.profileKeeps),
-      vaults: computed(() => AppState.vaults)
+      vaults: computed(() => AppState.vaults),
+      userVaults: computed(() => AppState.userVaults),
+      userKeeps: computed(() => AppState.userKeeps)
 
     })
     onMounted(async() => {
@@ -73,6 +81,8 @@ export default {
         await accountService.getProfile(route.params.id)
         await keepsService.getKeepsByProfile(route.params.id)
         await vaultsService.getVaults(route.params.id)
+        await vaultsService.getUserVaults(route.params.id)
+        await keepsService.getUserKeeps(route.params.id)
       } catch (error) {
         Notification.toast('Error: ' + error, 'error')
       }

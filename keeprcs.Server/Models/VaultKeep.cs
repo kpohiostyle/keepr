@@ -6,15 +6,12 @@ namespace keeprcs.Server.Models
         public string CreatorId { get; set; }
         public int KeepId { get; set; }
         public int VaultId { get; set; }
+        public Profile Creator { get; set; }
     }
 
     public class VaultKeepViewModel : Keep
     {
-        public string VaultName { get; set; }
-        public string VaultDescription { get; set; }
-
         public int VaultKeepId { get; set; }
-        public int KeepId { get; set; }
-        public int VaultId { get; set; }
+
     }
 }

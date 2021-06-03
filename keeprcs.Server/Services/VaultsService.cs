@@ -16,7 +16,8 @@ namespace keeprcs.Server.Services
 
         internal Vault GetById(int id)
         {
-            var v = _vaultsRepo.GetById(id);
+
+            Vault v = _vaultsRepo.GetById(id);
             if (v == null)
             {
                 throw new Exception("Invalid Id");

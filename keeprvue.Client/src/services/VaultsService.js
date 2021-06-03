@@ -8,6 +8,7 @@ class VaultsService {
   }
 
   async getVaultById(id) {
+    AppState.vaults = AppState.vaults.filter(v => v.isPrivate !== true)
     const res = await api.get(`api/vaults/${id}`)
     AppState.activeVault = res.data
   }
@@ -20,6 +21,11 @@ class VaultsService {
   async addKeep(vaultId, body) {
     const res = await api.post(`api/vaultKeeps/${vaultId}`, body)
     AppState.vaultKeeps = res.data
+  }
+
+  async getUserVaults() {
+    const res = await api.get('account/vaults')
+    AppState.userVaults = res.data
   }
 }
 

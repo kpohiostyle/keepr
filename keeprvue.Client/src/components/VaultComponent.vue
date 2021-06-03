@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-3 my-2 col-6">
-    <router-link :to="{name: 'VaultPage', params: {id: vaultId}}">
+    <router-link :to="{name: 'VaultPage', params: {id: vault.id}}">
       <div class="card p-5 shadow ">
         <div class="card-img-overlay d-flex align-items-center justify-content-center">
           <h5 class="card-title">
@@ -22,7 +22,7 @@ export default {
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const state = reactive({
       activeVault: computed(() => AppState.activeVault)
     })

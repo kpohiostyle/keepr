@@ -72,7 +72,7 @@ namespace keeprcs.Server.Repositories
             a.*
             FROM vaults v 
             JOIN accounts a ON v.CreatorId = a.id
-            WHERE creatorId = @id";
+            WHERE v.CreatorId = @id";
             return _db.Query<Vault, Account, Vault>(sql, (v, a) =>
             {
                 v.Creator = a;

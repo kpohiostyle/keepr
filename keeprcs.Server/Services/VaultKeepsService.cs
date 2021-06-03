@@ -13,14 +13,21 @@ namespace keeprcs.Server.Services
             _vkRepo = vkRepo;
         }
 
+
+
         internal VaultKeep CreateVaultKeep(VaultKeep vk)
         {
             return _vkRepo.Create(vk);
         }
 
-        internal void DeleteVaultKeep(int keepId, string CreatorId)
+        internal void DeleteVaultKeep(int id, string creatorId)
         {
-
+            VaultKeepViewModel vault = _vkRepo.GetVaultKeepById(id);
+            if (vault.CreatorId != creatorId)
+            {
+                throw new Exception("Invalid Request");
+            }
+            _vkRepo.DeleteVaultKeep(id);
         }
     }
 }

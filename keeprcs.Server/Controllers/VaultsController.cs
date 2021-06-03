@@ -20,11 +20,20 @@ namespace keeprcs.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Keep> GetById(int id)
+        public async Task<ActionResult<Keep>> GetById(int id)
         {
             try
             {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 Vault vault = _vs.GetById(id);
+                if (vault.isPrivate == true)
+                {
+                    return Ok(vault.isPrivate == false);
+                }
+                if (vault.CreatorId == userInfo.Id && vault.isPrivate == true)
+                {
+                    return Ok(vault.isPrivate == true && vault.isPrivate == false);
+                }
                 return Ok(vault);
             }
             catch (System.Exception e)
