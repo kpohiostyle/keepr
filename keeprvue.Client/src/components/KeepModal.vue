@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" v-if="state.activeProfile">
+  <div class="container-fluid" v-if="state.activeKeep">
     <div class="modal" id="keepDetailsModal" tabindex="-1" aria-labelledby="#keepDetailsModal" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -19,34 +19,41 @@
               <h3 class="p-3 mb-2">
                 {{ state.activeKeep.name }}
               </h3>
-              <p class=" pb-5 mr-5 b-border">
+              <p class=" pb-5 pl-3 mr-5 mr-ml-1 b-border">
                 {{ state.activeKeep.description }}
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, facere maiores, ad sint cum nam eos non repudiandae officiis laudantium aut, minima atque aspernatur facilis quod inventore est magni dolores.
               </p>
-              <div class="row d-flex flex-inline justify-content-between align-items-end">
-                <div class="dropdown">
-                  <button class="btn btn-add dropdown-toggle"
-                          type="button"
-                          id="dropdownMenuButton"
-                          data-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false"
-                  >
-                    Add To Vault
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <!-- <a class="dropdown-item" href="#">Action</a> -->
-                    <a @click="addKeep(vault.id)" class="dropdown-item text-dark" v-for="vault in state.vaults" :key="vault.id">
-                      {{ vault.name }}
-                    </a>
+              <div class="row">
+                <div class="col-12 m-2 d-flex flex-inline justify-content-around align-items-end">
+                  <div class="dropdown text-dark">
+                    <button class="btn btn-add dropdown-toggle text-dark"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                    >
+                      Add To Vault
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <!-- <a class="dropdown-item" href="#">Action</a> -->
+                      <a class="dropdown-item text-dark" v-for="userVault in state.userVaults" :key="userVault.id">
+                        <p @click="addKeep(userVault.id)">{{ userVault.name }}</p>
+                      </a>
+                    </div>
                   </div>
-                </div>
-                <div class="col-3 ml-5">
-                  <button class="btn-del" @click="deleteKeep(state.activeKeep)" v-if="state.activeKeep.creatorId == state.account.id">
+
+                  <button class="btn-del" @click="removeKeep()" v-if="$route.name=='VaultPage' && state.activeVault.creatorId == state.account.id && keep.vaultKeepId">
+                    Remove
+                  </button>
+                  <button class="btn-del" @click="deleteKeep(state.activeKeep)" v-else-if="state.activeKeep.creatorId == state.account.id">
                     <i class="far fa-trash-alt"></i>
                   </button>
-                </div>
-                <div class="col-3">
+
+                  <router-link v-if="state.activeKeep.creator" :to="{name: 'ProfilePage', params: {id: state.activeKeep.creatorId}}">
+                    <small>{{ state.activeKeep.creator.name }}</small>
+                    <img :src="state.activeKeep.creator.picture" class="rounded-circle small-image profile" alt="">
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -75,9 +82,10 @@ export default {
     const state = reactive({
       activeKeep: computed(() => AppState.activeKeep),
       activeProfile: computed(() => AppState.activeProfile),
+      activeVault: computed(() => AppState.activeVault),
       keeps: computed(() => AppState.keeps),
       user: computed(() => AppState.user),
-      vaults: computed(() => AppState.vaults),
+      userVaults: computed(() => AppState.userVaults),
       account: computed(() => AppState.account)
     })
     return {
@@ -92,9 +100,21 @@ export default {
           Notification.toast('Error: ' + error, 'error')
         }
       },
+      async removeKeep() {
+        try {
+          if (await Notification.confirmAction()) {
+            await keepsService.removeKeep(props.keep.vaultKeepId)
+          }
+          $('#keepDetailsModal').modal('hide')
+        } catch (error) {
+          Notification.toast('Error: ' + error, 'error')
+        }
+      },
       async addKeep(id) {
         try {
-          await vaultsService.addKeep(id, props.keep)
+          await vaultsService.addKeep(id, state.activeKeep.id)
+          $('#keepDetailsModal').modal('hide')
+          Notification.toast('Added To Vault', 'success')
         } catch (error) {
           Notification.toast('Error:' + error, 'error')
         }
@@ -124,6 +144,7 @@ export default {
 }
 .btn-add:hover{
   background-color: #0C7C59;
+  color: white;
 }
 .btn-close{
   position: absolute;
@@ -131,5 +152,9 @@ export default {
   right: 1rem;
   color: var(--primary);
 
+}
+.small-image{
+  height: 30px;
+  width: 30px;
 }
 </style>

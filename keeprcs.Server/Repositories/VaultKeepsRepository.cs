@@ -20,6 +20,10 @@ namespace keeprcs.Server.Repositories
         {
             // TODO update keep to increase its keep count by 1
             string sql = @"
+            UPDATE keeps
+            SET
+            keeps = keeps + 1
+            WHERE id = @KeepId;
             INSERT 
             INTO vault_keep
                 (vaultId, keepId, creatorId)

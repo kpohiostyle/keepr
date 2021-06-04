@@ -3,7 +3,7 @@
     <router-link :to="{name: 'VaultPage', params: {id: vault.id}}">
       <div class="card p-5 shadow ">
         <div class="card-img-overlay d-flex align-items-center justify-content-center">
-          <h5 class="card-title">
+          <h5 class="card-title vault-title">
             {{ vault.name }}
           </h5>
         </div>
@@ -44,6 +44,10 @@ export default {
 .small-image{
   height: 30px;
   width: 30px;
+}
+.vault-title{
+  color: var(--primary);
+  text-shadow: 1px black;
 }
 button{
   border:none;

@@ -27,6 +27,10 @@ class KeepsService {
     AppState.keeps = AppState.keeps.filter(k => k.id !== id)
   }
 
+  async removeKeep(id) {
+    await api.delete(`api/vaultkeeps/${id}`)
+  }
+
   async getUserKeeps() {
     const res = await api.get('account/keeps')
     AppState.userKeeps = res.data

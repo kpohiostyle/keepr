@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" id="addkeepmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal" id="addkeepmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -84,7 +84,7 @@ export default {
         //   state.newKeep = route.params.id
           await keepsService.createKeep(state.newKeep)
           state.newKeep = {}
-          $('#addKeepModal').modal('hide')
+          $('#addkeepmodal').modal('hide')
           Notification.toast('Successfully Created', 'success')
         } catch (error) {
           Notification.toast('Error: ' + error, 'error')

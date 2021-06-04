@@ -4,10 +4,15 @@
       <div class="col-3 px-4">
         <img :src="state.activeProfile.picture" alt="Profile Image">
       </div>
-      <div class="col-f6 px-4">
+      <div class="col-f6 px-4" v-if="state.user.id === $route.params.id">
         <h2>{{ state.activeProfile.name }}</h2>
         <h5>Vaults: {{ state.userVaults.length }}</h5>
         <h5>Keeps: {{ state.userKeeps.length }}</h5>
+      </div>
+      <div class="col-f6 px-4" v-else>
+        <h2>{{ state.activeProfile.name }}</h2>
+        <h5>Vaults: {{ state.vaults.length }}</h5>
+        <h5>Keeps: {{ state.profileKeeps.length }}</h5>
       </div>
     </div>
     <div class="row mt-5 px-4">
@@ -23,13 +28,14 @@
           <i class="far fa-plus-square"></i>
         </button>
       </div>
-      <div class="row mb-5 px-4" v-if="state.user.id === $route.params.id">
-        <VaultComponent v-for="vault in state.userVaults" :key="vault.id" :vault="vault" />
-      </div>
-      <div class="row mb-5 px-4" v-else>
-        <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
-      </div>
     </div>
+    <div class="row mb-5 px-4" v-if="state.account.id === $route.params.id">
+      <VaultComponent v-for="vault in state.userVaults" :key="vault.id" :vault="vault" />
+    </div>
+    <div class="row mb-5 px-4" v-else>
+      <VaultComponent v-for="vault in state.vaults" :key="vault.id" :vault="vault" />
+    </div>
+
     <div class="row mb-2 px-4">
       <div class="col-12">
         <h3>Keeps</h3>
@@ -43,11 +49,23 @@
           <i class="far fa-plus-square"></i>
         </button>
       </div>
-      <div class="row" v-if="state.account.id == $route.params.id">
-        <KeepComponent v-for="keep in state.userKeeps" :key="keep.id" :keep="keep" />
+    </div>
+    <div class="row" v-if="state.account.id == $route.params.id">
+      <div class="home flex-grow-1 d-flex flex-column">
+        <div class="row">
+          <div class="card-columns">
+            <KeepComponent v-for="keep in state.userKeeps" :key="keep.id" :keep="keep" />
+          </div>
+        </div>
       </div>
-      <div class="row" v-else>
-        <KeepComponent v-for="keep in state.profileKeeps" :key="keep.id" :keep="keep" />
+    </div>
+    <div class="row" v-else>
+      <div class="home flex-grow-1 d-flex flex-column">
+        <div class="row">
+          <div class="card-columns">
+            <KeepComponent v-for="keep in state.profileKeeps" :key="keep.id" :keep="keep" />
+          </div>
+        </div>
       </div>
     </div>
     <AddKeepModal />

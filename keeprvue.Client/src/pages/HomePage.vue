@@ -1,7 +1,9 @@
 <template>
   <div class="home flex-grow-1 d-flex flex-column">
-    <div class="row px-md-5 px-3">
-      <KeepComponent v-for="keep in state.keeps" :key="keep.id" :keep="keep" />
+    <div class="row mt-4">
+      <div class="card-columns">
+        <KeepComponent v-for="keep in state.keeps" :key="keep.id" :keep="keep" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,5 +41,7 @@ export default {
     height: 200px;
     width: 200px;
   }
+
 }
+
 </style>
