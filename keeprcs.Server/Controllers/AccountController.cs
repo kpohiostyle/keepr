@@ -46,7 +46,7 @@ namespace keeprcs.Server.Controllers
             try
             {//TODO ask about private vaults
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                List<Vault> userVaults = _vs.GetVaults(userInfo.Id);
+                List<Vault> userVaults = _vs.GetVaults(userInfo.Id, false);
                 return Ok(userVaults);
             }
             catch (System.Exception e)

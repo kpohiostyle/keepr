@@ -22,12 +22,17 @@ namespace keeprcs.Server.Services
 
         internal void DeleteVaultKeep(int id, string creatorId)
         {
-            VaultKeepViewModel vault = _vkRepo.GetVaultKeepById(id);
+            VaultKeep vault = _vkRepo.GetVaultKeepById(id);
             if (vault.CreatorId != creatorId)
             {
                 throw new Exception("Invalid Request");
             }
             _vkRepo.DeleteVaultKeep(id);
+        }
+
+        internal object GetKeepsByVaultId(int id)
+        {
+            return _vkRepo.GetKeepsByVault(id);
         }
     }
 }

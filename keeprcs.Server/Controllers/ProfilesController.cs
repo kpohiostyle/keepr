@@ -47,7 +47,7 @@ namespace keeprcs.Server.Controllers
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
 
-                List<Vault> vaults = _vs.GetVaults(id);
+                List<Vault> vaults = _vs.GetVaults(id, true);
                 return Ok(vaults);
             }
             catch (System.Exception e)

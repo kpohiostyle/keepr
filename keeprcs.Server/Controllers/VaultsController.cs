@@ -13,11 +13,36 @@ namespace keeprcs.Server.Controllers
     public class VaultsController : ControllerBase
     {
         private readonly VaultsService _vs;
+        private readonly VaultKeepsService _vks;
 
-        public VaultsController(VaultsService vs)
+        public VaultsController(VaultsService vs, VaultKeepsService vks)
         {
             _vs = vs;
+            _vks = vks;
         }
+
+        [HttpGet("{id}/keeps")]
+        public async Task<ActionResult<VaultKeepViewModel>> GetKeepsById(int id)
+        {
+            try
+            {
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                Vault vault = _vs.GetById(id);
+                if (vault.isPrivate == true && vault.CreatorId != userInfo?.Id)
+                {
+                    throw new System.Exception("invalid Request");
+                }
+                return Ok(_vks.GetKeepsByVaultId(id));
+            }
+            catch (System.Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Keep>> GetById(int id)
@@ -26,13 +51,9 @@ namespace keeprcs.Server.Controllers
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 Vault vault = _vs.GetById(id);
-                if (vault.isPrivate == true)
+                if (vault.CreatorId != userInfo?.Id && vault.isPrivate == true)
                 {
-                    return Ok(vault.isPrivate == false);
-                }
-                if (vault.CreatorId == userInfo.Id && vault.isPrivate == true)
-                {
-                    return Ok(vault.isPrivate == true && vault.isPrivate == false);
+                    throw new System.Exception("invaild access");
                 }
                 return Ok(vault);
             }

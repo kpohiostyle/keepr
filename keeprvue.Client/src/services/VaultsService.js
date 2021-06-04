@@ -27,6 +27,8 @@ class VaultsService {
     const res = await api.get('account/vaults')
     AppState.userVaults = res.data
   }
+
+  // TODO getkeepsbyvaultid api/vaults/id/keeps
 }
 
 export const vaultsService = new VaultsService()

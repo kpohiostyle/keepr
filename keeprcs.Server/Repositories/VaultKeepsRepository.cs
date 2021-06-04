@@ -35,44 +35,28 @@ namespace keeprcs.Server.Repositories
         {
             string sql = @"
             SELECT
-            k.*,
-            v.name as vName,
-            vk.id as vkId,
-            vk.vaultId as vId,
-            vk.keepId as kId,
-            vk.creatorId as creatorId
-            FROM
-            vault_keep vk
-            JOIN vaults v ON v.id = vId
-            JOIN keeps k ON k.id = kId
+                k.*,
+                vk.id as VaultKeepId,
+                a.*
+            FROM vault_keep vk
+            JOIN keeps k ON k.id = vk.keepId
             JOIN accounts a ON a.id = k.creatorId
-            WHERE
-            vkId = @id;";
+            WHERE vaultId = @id;";
             return _db.Query<VaultKeepViewModel, Account, VaultKeepViewModel>(sql, (vk, a) =>
             {
                 vk.Creator = a;
                 return vk;
             }, new { id }).ToList();
         }
-        public VaultKeepViewModel GetVaultKeepById(int id)
+        public VaultKeep GetVaultKeepById(int id)
         {
             string sql = @"
       SELECT 
-      vk.id as vkId,
-      vk.vaultId as vId,
-      vk.keepId as kId,
-      k.*,
-      p.*
-      FROM vault_keeps vk
-      JOIN keeps k ON k.id = kId
-      JOIN accounts a ON a.id = vk.creatorId
+        vk.*
+      FROM vault_keep vk
       WHERE vk.id = @id;
       ";
-            return _db.Query<VaultKeepViewModel, Account, VaultKeepViewModel>(sql, (vk, p) =>
-           {
-               vk.Creator = p;
-               return vk;
-           }, new { id }).FirstOrDefault();
+            return _db.QueryFirstOrDefault<VaultKeep>(sql, new { id });
         }
 
         internal void DeleteVaultKeep(int id)

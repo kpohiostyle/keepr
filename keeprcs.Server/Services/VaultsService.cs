@@ -42,9 +42,14 @@ namespace keeprcs.Server.Services
             _vaultsRepo.Delete(id);
         }
         // From ProfilesController
-        internal List<Vault> GetVaults(string id)
+        internal List<Vault> GetVaults(string id, bool filter)
         {
-            return _vaultsRepo.GetVaults(id);
+            var vaults = _vaultsRepo.GetVaults(id);
+            if (filter)
+            {
+                vaults = vaults.FindAll(vault => !vault.isPrivate);
+            }
+            return vaults;
         }
 
         internal Vault Update(Vault vault, string id)
